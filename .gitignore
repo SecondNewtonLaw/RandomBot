@@ -5,7 +5,7 @@
 
 # Personal IGNORE files
 *.[Ii][Gg][Nn][Oo][Rr][Ee]
-
+*.lock*
 # User-specific files
 *.rsuser
 *.suo
