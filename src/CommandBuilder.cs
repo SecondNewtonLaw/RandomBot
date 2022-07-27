@@ -46,10 +46,17 @@ public struct CommandBuilder
         bibleQuoteCommand.AddOption("chapter", ApplicationCommandOptionType.Integer, "The bibles book chapter", true);
         bibleQuoteCommand.AddOption("versicle", ApplicationCommandOptionType.Integer, "The bibles versicle you want to get", true);
 
+        SlashCommandBuilder redditGetterCommand = new()
+        {
+            Name = "reddit",
+            Description = "Gets a random post from the specified subreddit"
+        };
+        redditGetterCommand.AddOption("subreddit", ApplicationCommandOptionType.String, "The subreddit to get a post from", true);
 
         commands.Add(pingCommand.Build());
         commands.Add(googleSearchCommand.Build());
         commands.Add(bibleQuoteCommand.Build());
+        commands.Add(redditGetterCommand.Build());
         return commands;
     }
 }

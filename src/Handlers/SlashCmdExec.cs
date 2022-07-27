@@ -24,6 +24,9 @@ public partial class Handlers
                 case "biblequote":
                     await Commands.BibleSearchCommand(cmdSket);
                     break;
+                case "reddit":
+                    await Commands.SubredditCommand(cmdSket);
+                    break;
             }
         }
         catch (Exception ex)
