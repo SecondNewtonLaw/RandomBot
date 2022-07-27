@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Rest;
@@ -23,31 +24,34 @@ internal partial class Commands
             Footer = Extensions.GetTimeFooter()
         }.Build());
 
-        try
+        new Thread(async () =>
         {
-            List<string> ans = await Reddit.PostDownloader.Client.GetFromSubreddit(subreddit, allowNSFW, Reddit.PostDownloader.SubredditRequests.Random);
+            try
+            {
+                List<string> ans = await Reddit.PostDownloader.Client.GetFromSubreddit(subreddit, allowNSFW, Reddit.PostDownloader.SubredditRequests.Random);
 
-            await msg.ModifyAsync(x =>
-            {
-                x.Embed = new EmbedBuilder()
+                await msg.ModifyAsync(x =>
                 {
-                    Description = $"Post(s) found!\nLinks:\n\n{string.Join('\n', ans)}",
-                    Footer = Extensions.GetTimeFooter(),
-                    ImageUrl = ans[0]
-                }.Build();
-            });
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex);
-            await msg.ModifyAsync(x =>
+                    x.Embed = new EmbedBuilder()
+                    {
+                        Description = $"Post(s) found!\nLinks:\n\n{string.Join('\n', ans)}",
+                        Footer = Extensions.GetTimeFooter(),
+                        ImageUrl = ans[0]
+                    }.Build();
+                });
+            }
+            catch (Exception ex)
             {
-                x.Embed = new EmbedBuilder()
+                Console.WriteLine(ex);
+                await msg.ModifyAsync(x =>
                 {
-                    Description = "No subreddit post matched the criterium or it was a non-existent subreddit.",
-                    Footer = Extensions.GetTimeFooter()
-                }.Build();
-            });
-        }
+                    x.Embed = new EmbedBuilder()
+                    {
+                        Description = "No subreddit post matched the criterium or it was a non-existent subreddit.",
+                        Footer = Extensions.GetTimeFooter()
+                    }.Build();
+                });
+            }
+        }).Start();
     }
 }
