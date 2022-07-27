@@ -15,7 +15,7 @@ internal partial class Commands
         await cmdCtx.DeferAsync();
 
         string subreddit = (string)cmdCtx.Data.Options.ElementAt(0).Value;
-        bool allowNSFW = cmdCtx.Channel.GetGuild().GetTextChannel(cmdCtx.ChannelId!.Value).IsNsfw;
+        bool allowNSFW = cmdCtx.Channel.GetGuild().GetTextChannel(cmdCtx.Channel.Id!).IsNsfw;
 
         RestFollowupMessage msg = await cmdCtx.FollowupAsync(embed: new EmbedBuilder()
         {
