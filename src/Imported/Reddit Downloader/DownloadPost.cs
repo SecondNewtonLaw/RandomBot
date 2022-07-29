@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RandomBot;
+using Reddit.PostDownloader.Exceptions;
 using Reddit.PostDownloader.Structures.Deep;
 
 namespace Reddit.PostDownloader;
@@ -17,7 +18,7 @@ partial class Downloader
         try
         {
             if (json is "{\"kind\": \"Listing\", \"data\": {\"after\": null, \"dist\": 0, \"modhash\": \"\", \"geo_filter\": \"\", \"children\": [], \"before\": null}}")
-                throw new Exception("Invalid Subreddit.");
+                throw new InvalidSubredditException("Invalid Subreddit.");
 
             try
             {

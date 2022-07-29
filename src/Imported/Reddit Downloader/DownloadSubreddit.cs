@@ -7,49 +7,65 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Reddit.PostDownloader;
+using Reddit.PostDownloader.Exceptions;
 using Reddit.PostDownloader.Structures.Deep;
 using Spectre.Console;
 
 namespace Reddit.PostDownloader;
 
-class Client
+static class Client
 {
     public static Downloader dlCtx = new();
     public static async Task<List<string>> GetFromSubreddit(string subreddit, bool allowNSFW, SubredditRequests searchParam)
     {
-        for (int i = 0; i < 25; i++)
+        for (int i = 0; i < 40; i++)
         {
-            SubredditPost post = (await Downloader.DownloadPost(subreddit, searchParam, 1))[0];
-
-            #region 'Safe-Guards'
-
-            if (post.IsNSFW() && !allowNSFW)
+            try
             {
-                continue;
-            }
-            #endregion 'Safe-Guards'
+                SubredditPost post = (await Downloader.DownloadPost(subreddit, searchParam, 1))[0];
 
-            #region Do when finding X
+                #region 'Safe-Guards'
 
-            if (post.IsImage() || post.IsGif())
-            {
-                return new() { post.Data.Children[0].Data.UrlOverriddenByDest!.ToString() };
-            }
-
-            if (post.IsGallery())
-            {
-                List<string> strs = new();
-                List<Downloader.ImageInformation?> imgInfo = await dlCtx.GetGalleryInformation(post);
-
-                for (int j = 0; j < imgInfo.Count; j++)
+                if (post.IsNSFW() && !allowNSFW)
                 {
-                    strs.Add(imgInfo[j]!.Value.Origin.ToString());
+                    continue;
                 }
 
-                return strs;
+                #endregion 'Safe-Guards'
+
+                #region Do when finding X
+
+                if (post.IsImage() || post.IsGif())
+                {
+                    return new() { post.Data.Children[0].Data.UrlOverriddenByDest!.ToString() };
+                }
+
+                if (post.IsGallery())
+                {
+                    List<string> strs = new();
+                    try
+                    {
+                        List<Downloader.ImageInformation?> imgInfo = await dlCtx.GetGalleryInformation(post);
+
+                        for (int j = 0; j < imgInfo.Count; j++)
+                        {
+                            strs.Add(imgInfo[j]!.Value.Origin.ToString());
+                        }
+                        return strs;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"An Exception Occured -> {ex}");
+                    }
+                }
+                #endregion
+
             }
-            #endregion
+            catch (InvalidSubredditException)
+            {
+                throw;
+            }
         }
-        throw new Exception("No Posts with Images or Galleries Encountered!");
+        throw new NoPostsException("No Posts with Images or Galleries Encountered!");
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Rest;
 using Discord.WebSocket;
+using Reddit.PostDownloader.Exceptions;
 
 namespace RandomBot;
 
@@ -40,14 +41,35 @@ internal partial class Commands
                     }.Build();
                 });
             }
-            catch (Exception ex)
+            catch (NoPostsException)
             {
-                Console.WriteLine(ex);
                 await msg.ModifyAsync(x =>
                 {
                     x.Embed = new EmbedBuilder()
                     {
-                        Description = "No subreddit post matched the criterium or it was a non-existent subreddit.",
+                        Description = $"The bot could not find a post in the subreddit in subreddit **`{subreddit}`** that contained a gif, a gallery or an image.",
+                        Footer = Extensions.GetTimeFooter()
+                    }.Build();
+                });
+            }
+            catch (InvalidSubredditException)
+            {
+                await msg.ModifyAsync(x =>
+                {
+                    x.Embed = new EmbedBuilder()
+                    {
+                        Description = $"The bot evaluated the subreddit **`{subreddit}`** to be non-existant.",
+                        Footer = Extensions.GetTimeFooter()
+                    }.Build();
+                });
+            }
+            catch (Exception ex)
+            {
+                await msg.ModifyAsync(x =>
+                {
+                    x.Embed = new EmbedBuilder()
+                    {
+                        Description = $"The bot suffered an unknown error... Strange, Stack Trace attached below\n\n```prolog\n{ex}\n```",
                         Footer = Extensions.GetTimeFooter()
                     }.Build();
                 });
