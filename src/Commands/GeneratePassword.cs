@@ -43,7 +43,7 @@ internal partial class Commands
         long maxCharacters = (long)cmdCtx.Data.Options.ElementAt(2).Value;
 
         // lIMIT MAX CHARACTERS.
-        if (maxCharacters < trueMaxCharacterLimit)
+        if (maxCharacters > trueMaxCharacterLimit)
         {
             await cmdCtx.FollowupAsync(embed: new EmbedBuilder()
             {
@@ -51,6 +51,7 @@ internal partial class Commands
                 Description = $"ERROR! :x:\nThe max password length is of **`{trueMaxCharacterLimit}`**; this is not allowed, as the maximum limit is of **`{maxCharacters}`** characters.",
                 Footer = Extensions.GetTimeFooter()
             }.Build());
+            return;
         }
 
         new Thread(async () =>
