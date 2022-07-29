@@ -53,10 +53,27 @@ public struct CommandBuilder
         };
         redditGetterCommand.AddOption("subreddit", ApplicationCommandOptionType.String, "The subreddit to get a post from", true);
 
+        SlashCommandBuilder passGenCommand = new()
+        {
+            Name = "passwordgenerator",
+            Description = "Generates passwords with the specified parameters"
+        };
+        passGenCommand.AddOption("specialcharacters", ApplicationCommandOptionType.Boolean, "Use special characters in the password", true);
+        passGenCommand.AddOption("numbers", ApplicationCommandOptionType.Boolean, "Use numbers in the password", true);
+        passGenCommand.AddOption("maxcharacters", ApplicationCommandOptionType.Integer, "The maximum character count of the password max is 4088", true);
+
+        /*        
+            bool useSpecialCharacters = (bool)cmdCtx.Data.Options.ElementAt(0).Value,
+            useNumbersCharacters = (bool)cmdCtx.Data.Options.ElementAt(1).Value;
+            long maxCharacters = (long)cmdCtx.Data.Options.ElementAt(2).Value;
+        */
+
         commands.Add(pingCommand.Build());
         commands.Add(googleSearchCommand.Build());
         commands.Add(bibleQuoteCommand.Build());
         commands.Add(redditGetterCommand.Build());
+        commands.Add(passGenCommand.Build());
+
         return commands;
     }
 }

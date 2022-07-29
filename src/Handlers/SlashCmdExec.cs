@@ -27,6 +27,9 @@ public partial class Handlers
                 case "reddit":
                     await Commands.SubredditCommand(cmdSket);
                     break;
+                case "passwordgenerator":
+                    await Commands.PasswordGeneratorCommand(cmdSket);
+                    break;
             }
         }
         catch (Exception ex)
