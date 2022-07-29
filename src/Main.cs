@@ -77,6 +77,15 @@ class MainActivity
                         AnsiConsole.MarkupLine($"[yellow bold underline][[Command Line Interface]][/] -> [green bold underline]Command Building Completed![/] ✅");
                     }
                     break;
+                case "logout" or "exit":
+                    AnsiConsole.MarkupLine("[green underline bold italic]Good Bye Hoster![/]\n\n[red]Terminating [green]Http[/] & [green]Bot Client[/]...[/]");
+                    await BotClient.StopAsync();
+                    await BotClient.LogoutAsync();
+                    BotClient.Dispose();
+                    HttpClient.Dispose();
+                    AnsiConsole.MarkupLine("[green underline bold]Operation Completed! Good bye![/]");
+                    Environment.Exit(0);
+                    break;
             }
         }
     }
