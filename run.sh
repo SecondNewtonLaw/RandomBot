@@ -1,1 +1,1 @@
-dotnet run 
+dotnet run -c Release
