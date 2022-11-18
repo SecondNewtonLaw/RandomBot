@@ -55,7 +55,7 @@ class MainActivity
 
     internal static async Task ListenConsole()
     {
-        ulong[] serverIds = new ulong[] { 1001635282912809000, 1002382980620226561 };
+        ulong[] serverIds = new ulong[] { 1001635282912809000, 1002382980620226561, 1026842718984491068 };
         CommandBuilder builder = new();
         while (true)
         {
@@ -68,10 +68,15 @@ class MainActivity
             switch (str)
             {
                 case "buildcommand":
-                    SocketGuild TMP = null!;
+                    SocketGuild? TMP = null!;
                     for (int i = 0; i < serverIds.Length; i++)
                     {
                         TMP = BotClient.GetGuild(serverIds[i]);
+                        if (TMP is null) 
+                        {
+                            AnsiConsole.MarkupLine($"The bot was unable to reach the server with ID {serverIds[i]}, please, verify if the bot has access to it...");
+                            continue; // Server ID not valid.
+                        }
                         AnsiConsole.MarkupLine($"[yellow bold underline][[Command Line Interface]][/] -> [green bold underline]Building commands [[SLASH]] for [yellow underline bold]{TMP.Name} ({serverIds[i]})[/][/]");
                         await builder.BuildFor(TMP);
                         AnsiConsole.MarkupLine($"[yellow bold underline][[Command Line Interface]][/] -> [green bold underline]Command Building Completed![/] ✅");
