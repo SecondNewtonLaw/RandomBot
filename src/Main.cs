@@ -40,11 +40,11 @@ class MainActivity
         BotClient.SlashCommandExecuted += Handlers.HandleSlashCommandAsync;
 
         AnsiConsole.MarkupLine("[green][[INFO]] [italic]Starting[/] HTTP Server, [yellow bold]awaiting pings[/]...[/]");
-        _ = pingSRV.StartServer();
-
-        AnsiConsole.MarkupLine("[yellow][[WARN]] Replit Spams the Discord gateway, and [red underline bold]will cause a ratelimit[/], avoid this by adding an [red bold]artificial time-out[/] of [red]~3 Minutes[/][/]");
-        await Task.Delay(3 * 1000 * 60); // Wait 3 Minutes
-        AnsiConsole.MarkupLine("[green][[INFO]] [bold underline]Time-out completed![/] Bot runtime starting up...[/]");
+        // Not needed if you are NOT on Replit. Enable it if you need it by uncommenting the lines below.
+        // _ = pingSRV.StartServer();
+        // AnsiConsole.MarkupLine("[yellow][[WARN]] Replit Spams the Discord gateway, and [red underline bold]will cause a ratelimit[/], avoid this by adding an [red bold]artificial time-out[/] of [red]~3 Minutes[/][/]");
+        // await Task.Delay(3 * 1000 * 60); // Wait 3 Minutes
+        // AnsiConsole.MarkupLine("[green][[INFO]] [bold underline]Time-out completed![/] Bot runtime starting up...[/]");
 
         // Login & Startup
         await BotClient.LoginAsync(TokenType.Bot, Token, true);
