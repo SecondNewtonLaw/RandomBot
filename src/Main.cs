@@ -72,7 +72,7 @@ class MainActivity
                     for (int i = 0; i < serverIds.Length; i++)
                     {
                         TMP = BotClient.GetGuild(serverIds[i]);
-                        if (TMP is null) 
+                        if (TMP == null) 
                         {
                             AnsiConsole.MarkupLine($"The bot was unable to reach the server with ID {serverIds[i]}, please, verify if the bot has access to it...");
                             continue; // Server ID not valid.
